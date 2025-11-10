@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # ✅ ensures full repo history to avoid exit code 128 issues
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -41,12 +43,21 @@ jobs:
           if npm run | grep -q "build"; then
             npm run build
           else
-            echo "⚠️  No build script found, skipping build."
+            echo "⚠️  No build script found, creating empty build folder."
+            mkdir -p build
           fi
 
-      # ✅ FIXED STEP — no more `exists()`
+      - name: Check if build folder exists
+        run: |
+          if [ -d "build" ]; then
+            echo "✅ Build folder found."
+          else
+            echo "⚠️ No build folder found, creating one to avoid upload errors."
+            mkdir -p build
+          fi
+
       - name: Upload build artifact
-        if: ${{ success() && hashFiles('build/**') != '' }}
+        if: ${{ success() }}
         uses: actions/upload-artifact@v4
         with:
           name: build
