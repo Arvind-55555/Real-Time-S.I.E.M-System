@@ -24,7 +24,9 @@ jobs:
         run: npm ci
 
       - name: Verify package.json scripts
-        run: jq '.scripts' package.json
+        run: |
+          echo "Available scripts:"
+          jq '.scripts' package.json || cat package.json
 
       - name: Run tests
         run: |
@@ -42,15 +44,10 @@ jobs:
             echo "⚠️  No build script found, skipping build."
           fi
 
+      # ✅ FIXED STEP — no more `exists()`
       - name: Upload build artifact
-        if: success() && exists('build')
+        if: ${{ success() && hashFiles('build/**') != '' }}
         uses: actions/upload-artifact@v4
         with:
           name: build
           path: build
-
-      - name: List files and package info
-        run: |
-          pwd
-          ls -la
-          cat package.json | jq '.scripts'
