@@ -6,11 +6,10 @@
 
 A comprehensive Security Information and Event Management (SIEM) system for analyzing Apache access logs, detecting anomalies, and identifying potential security threats in real-time.
 
-![SIEM Dashboard](https://via.placeholder.com/800x400/1e293b/3b82f6?text=SIEM+Analysis+Dashboard)
-
 ## 🚀 Live Demo
 
-Try the interactive web interface here: [SIEM Analyzer Demo](https://claude.site/artifacts/your-artifact-id)
+[![View Artifact](https://img.shields.io/badge/View%20Artifact-%230077B5.svg?style=for-the-badge&logo=claude&logoColor=white)](https://claude.ai/public/artifacts/61aa2497-7d5b-4782-8796-f5a2d0c7571a)
+
 
 ## 📋 Table of Contents
 
