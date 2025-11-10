@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # Web interface
+  siem-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: siem-analyzer-web
+    ports:
+      - "3000:80"
+    volumes:
+      - ./sample-data:/usr/share/nginx/html/sample-data:ro
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    networks:
+      - siem-network
+
+  # Python analyzer service (optional)
+  siem-analyzer:
+    image: python:3.11-slim
+    container_name: siem-analyzer-python
+    working_dir: /app
+    volumes:
+      - ./scripts:/app/scripts
+      - ./sample-data:/app/data
+      - ./reports:/app/reports
+    command: tail -f /dev/null  # Keep container running
+    networks:
+      - siem-network
+
+networks:
+  siem-network:
+    driver: bridge
+
+volumes:
+  siem-data:

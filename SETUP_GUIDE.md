@@ -19,7 +19,7 @@ Before you begin, ensure you have the following installed:
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/siem-analysis-platform.git
+git clone https://github.com/Arvind-55555/Real-Time-S.I.E.M-System/siem-analysis-platform.git
 cd siem-analysis-platform
 ```
 
@@ -273,9 +273,8 @@ docker-compose build --no-cache
 ## 📞 Getting Help
 
 - 📖 [Documentation](docs/)
-- 🐛 [Report Issues](https://github.com/yourusername/siem-analysis-platform/issues)
-- 💬 [Discussions](https://github.com/yourusername/siem-analysis-platform/discussions)
-- 📧 Email: support@yourproject.com
+- 🐛 [Report Issues](https://github.com/Arvind-55555/siem-analysis-platform/issues)
+- 💬 [Discussions](https://github.com/Arvind-55555/siem-analysis-platform/discussions)
 
 ## ✅ Verification Checklist
 

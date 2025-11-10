@@ -1,0 +1,66 @@
+{
+  "name": "siem-analysis-platform",
+  "version": "1.0.0",
+  "description": "Real-time SIEM platform for analyzing Apache access logs and detecting security threats",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint src/**/*.{js,jsx}",
+    "format": "prettier --write src/**/*.{js,jsx,json,css,md}"
+  },
+  "keywords": [
+    "siem",
+    "security",
+    "log-analysis",
+    "anomaly-detection",
+    "cybersecurity",
+    "threat-detection",
+    "apache-logs",
+    "intrusion-detection"
+  ],
+  "author": "Arvind",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Arvind-55555/Real-Time-S.I.E.M-System/siem-analysis-platform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Arvind-55555/Real-Time-S.I.E.M-System/siem-analysis-platform/issues"
+  },
+  "homepage": "https://github.com/Arvind-55555/Real-Time-S.I.E.M-System/siem-analysis-platform",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "lucide-react": "^0.263.1",
+    "recharts": "^2.5.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/user-event": "^13.5.0",
+    "eslint": "^8.38.0",
+    "eslint-config-react-app": "^7.0.1",
+    "prettier": "^2.8.7"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

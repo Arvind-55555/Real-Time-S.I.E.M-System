@@ -1,0 +1,30 @@
+# SIEM Analyzer Python Dependencies
+
+# Core dependencies
+python-dateutil>=2.8.2
+
+# Optional: Advanced analytics
+numpy>=1.21.0
+pandas>=1.3.0
+scikit-learn>=1.0.0
+
+# Optional: GeoIP support
+geoip2>=4.6.0
+maxminddb>=2.2.0
+
+# Optional: Visualization
+matplotlib>=3.5.0
+plotly>=5.10.0
+
+# Optional: Report generation
+reportlab>=3.6.12
+markdown>=3.4.1
+
+# Testing
+pytest>=7.2.0
+pytest-cov>=4.0.0
+
+# Code quality
+black>=23.1.0
+flake8>=6.0.0
+pylint>=2.16.0

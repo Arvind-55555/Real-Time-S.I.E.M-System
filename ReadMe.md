@@ -117,7 +117,7 @@ Try the interactive web interface here: [SIEM Analyzer Demo](https://claude.site
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/siem-analysis-platform.git
+git clone https://github.com/Arvind-55555/Real-Time-S.I.E.M-System/siem-analysis-platform.git
 cd siem-analysis-platform
 ```
 
@@ -357,7 +357,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Authors
 
-- **Your Name** - *Initial work* - [YourGitHub](https://github.com/yourusername)
+- **Arvind** - *Initial work* - [YourGitHub](https://github.com/Arvind-55555)
 
 ## 🙏 Acknowledgments
 
