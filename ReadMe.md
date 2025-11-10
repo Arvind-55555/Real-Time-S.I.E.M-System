@@ -116,7 +116,7 @@ A comprehensive Security Information and Event Management (SIEM) system for anal
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/Arvind-55555/Real-Time-S.I.E.M-System/siem-analysis-platform.git
+git clone https://github.com/Arvind-55555/Real-Time-S.I.E.M-System.git
 cd siem-analysis-platform
 ```
 
