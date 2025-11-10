@@ -14,7 +14,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # ✅ ensures full repo history to avoid exit code 128 issues
+          fetch-depth: 0
+          submodules: false  # ✅ ensures full repo history to avoid exit code 128 issues
           persist-credentials: false # avoids git credential cleanup bug
 
       - name: Set up Node
