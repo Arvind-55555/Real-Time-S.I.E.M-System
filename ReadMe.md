@@ -366,9 +366,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Apache Combined Log Format specification
 - OWASP Top 10 security risks
 
-## 📞 Support
-
-For support, email support@yourproject.com or join our Slack channel.
 
 ## 🔗 Related Projects
 
