@@ -48,3 +48,9 @@ jobs:
         with:
           name: build
           path: build
+
+      - name: List files and package info
+        run: |
+          pwd
+          ls -la
+          cat package.json | jq '.scripts'
