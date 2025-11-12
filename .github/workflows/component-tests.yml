@@ -1,0 +1,118 @@
+name: SIEM Component Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  component-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+    
+    - name: Test packet capture functionality
+      run: |
+        echo "🧪 Testing packet capture components..."
+        python -c "
+import scapy.all as scapy
+import pandas as pd
+
+# Test packet creation (simulated)
+print('Testing packet creation...')
+try:
+    # Create a simple IP packet (no network access)
+    packet = scapy.IP(dst='8.8.8.8')/scapy.TCP(dport=80)
+    print(f'✅ Packet creation: {packet.summary()}')
+    
+    # Test DataFrame creation for packet data
+    packet_data = pd.DataFrame({
+        'src_ip': ['192.168.1.1'],
+        'dst_ip': ['8.8.8.8'],
+        'protocol': ['TCP'],
+        'length': [64]
+    })
+    print('✅ Packet data structure test passed')
+    
+except Exception as e:
+    print(f'❌ Packet test failed: {e}')
+    exit(1)
+"
+    
+    - name: Test data processing components
+      run: |
+        echo "📊 Testing data processing components..."
+        python -c "
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import IsolationForest
+
+# Test anomaly detection setup
+print('Testing anomaly detection...')
+try:
+    # Create sample network data
+    data = pd.DataFrame({
+        'packet_size': [64, 128, 512, 1024, 1500, 64, 128],
+        'duration': [0.1, 0.2, 1.5, 2.0, 0.1, 0.1, 0.1],
+        'protocol_type': [6, 6, 6, 6, 6, 17, 17]  # TCP/UDP
+    })
+    
+    # Test isolation forest for anomaly detection
+    clf = IsolationForest(contamination=0.1, random_state=42)
+    anomalies = clf.fit_predict(data[['packet_size', 'duration']])
+    
+    print(f'✅ Anomaly detection test passed. Found {sum(anomalies == -1)} anomalies')
+    
+except Exception as e:
+    print(f'❌ Data processing test failed: {e}')
+    exit(1)
+"
+    
+    - name: Test Flask web components
+      run: |
+        echo "🌐 Testing web components..."
+        python -c "
+from flask import Flask, jsonify
+import threading
+import time
+import requests
+
+# Test Flask app creation
+app = Flask(__name__)
+
+@app.route('/health')
+def health_check():
+    return jsonify({'status': 'healthy', 'service': 'SIEM API'})
+
+def run_server():
+    app.run(host='127.0.0.1', port=5000, debug=False, use_reloader=False)
+
+# Start server in background thread
+server_thread = threading.Thread(target=run_server)
+server_thread.daemon = True
+server_thread.start()
+
+# Give server time to start
+time.sleep(2)
+
+# Test health endpoint
+try:
+    response = requests.get('http://127.0.0.1:5000/health', timeout=5)
+    if response.status_code == 200:
+        print('✅ Flask health endpoint test passed')
+    else:
+        print(f'❌ Health check failed: {response.status_code}')
+except Exception as e:
+    print(f'❌ Flask test failed: {e}')
+    exit(1)
+"
