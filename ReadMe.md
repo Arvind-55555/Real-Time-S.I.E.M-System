@@ -58,6 +58,7 @@ A comprehensive Security Information and Event Management (SIEM) system for anal
 | Suspicious User Agents | `sqlmap`, `nikto`, `nmap`, `curl` | Low-Medium |
 | High Failure Rate | >50% failed requests | Medium |
 
+
 ## 🏗️ Architecture
 
 ```
@@ -146,6 +147,13 @@ pip install -r requirements.txt
 ```bash
 python siem_analyzer.py --input access.log --output report.md
 ```
+
+## Installation
+### From PyPI
+```bash
+pip install realtime-siem
+```
+
 
 ## 📖 Usage
 

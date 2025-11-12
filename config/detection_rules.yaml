@@ -1,0 +1,10 @@
+rules:
+  - name: "brute_force_detection"
+    description: "Detect multiple failed login attempts"
+    condition: "event.failed_logins > 5 within 5m"
+    severity: "high"
+    
+  - name: "data_exfiltration"
+    description: "Detect large data transfers"
+    condition: "event.bytes_sent > 1000000"
+    severity: "critical"
