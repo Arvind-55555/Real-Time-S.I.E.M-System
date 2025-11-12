@@ -1,0 +1,86 @@
+name: Dependency Check
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 0 * * 0' # Weekly dependency check
+
+jobs:
+  dependency-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          libpcap-dev \
+          tshark \
+          wireshark-common
+    
+    - name: Install Python dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Verify all imports
+      run: |
+        echo "🔍 Testing all package imports..."
+        python -c "
+try:
+    # Core data processing
+    import pandas as pd
+    import numpy as np
+    print('✅ pandas & numpy imported')
+    
+    # Network analysis
+    import scapy.all as scapy
+    print('✅ scapy imported')
+    
+    # Web framework
+    from flask import Flask
+    print('✅ flask imported')
+    
+    # Data visualization
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import plotly.express as px
+    print('✅ visualization libraries imported')
+    
+    # Machine learning
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.preprocessing import StandardScaler
+    print('✅ scikit-learn imported')
+    
+    # Database connections
+    from elasticsearch import Elasticsearch
+    import pymongo
+    print('✅ database clients imported')
+    
+    # Message queue
+    from kafka import KafkaProducer
+    print('✅ kafka imported')
+    
+    # Web scraping
+    from bs4 import BeautifulSoup
+    print('✅ beautifulsoup4 imported')
+    
+    # Network analysis
+    import networkx as nx
+    print('✅ networkx imported')
+    
+    print('🎉 All imports successful!')
+    
+except ImportError as e:
+    print(f'❌ Import failed: {e}')
+    exit(1)
+"
