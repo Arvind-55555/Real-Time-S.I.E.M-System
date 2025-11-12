@@ -13,8 +13,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        submodules: false
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -30,19 +28,17 @@ jobs:
           tshark \
           wireshark-common
 
-    - name: Display Python and environment info
+    - name: Display environment info
       run: |
         python --version
         pip --version
         echo "Current directory: $(pwd)"
         ls -la
 
-    - name: Create or verify requirements.txt
+    - name: Create requirements.txt
       run: |
-        # Check if requirements.txt exists and has content
-        if [ ! -f requirements.txt ] || [ ! -s requirements.txt ]; then
-          echo "Creating comprehensive requirements.txt..."
-          cat > requirements.txt << 'EOF'
+        # Create comprehensive requirements.txt
+        cat > requirements.txt << 'REQUIREMENTS_EOF'
 scapy>=2.4.5
 pandas>=1.5.0
 matplotlib>=3.5.0
@@ -61,13 +57,10 @@ networkx>=2.8.0
 pyshark>=0.4.5
 python-dateutil>=2.8.0
 urllib3>=1.26.0
-EOF
-          echo "✅ Created requirements.txt with all dependencies"
-        else
-          echo "📋 Using existing requirements.txt"
-        fi
+REQUIREMENTS_EOF
         
-        echo "Contents of requirements.txt:"
+        echo "✅ Created requirements.txt"
+        echo "Contents:"
         cat requirements.txt
 
     - name: Upgrade pip and install dependencies
@@ -81,53 +74,50 @@ EOF
         # Check Python files for syntax errors
         find . -name "*.py" -exec python -m py_compile {} \; || true
         
-        # Check if main modules can be imported
-        python -c "import scapy, pandas, numpy, flask" && echo "✅ Core imports successful"
+        # Test core imports
+        python -c "import scapy, pandas, numpy, flask, requests" && echo "✅ Core imports successful"
 
     - name: Test SIEM components
       run: |
         echo "🧪 Testing SIEM components..."
-        # Create a simple test script
-        cat > test_siem.py << 'EOF'
-#!/usr/bin/env python3
-"""
-Basic SIEM System Tests
-"""
-try:
-    import scapy.all as scapy
-    import pandas as pd
-    import numpy as np
-    from flask import Flask
-    import requests
-    
-    print("✅ All core imports successful")
-    
-    # Test basic functionality
-    app = Flask(__name__)
-    print("✅ Flask app creation successful")
-    
-    # Test data manipulation
-    data = pd.DataFrame({'test': [1, 2, 3]})
-    print("✅ Pandas DataFrame creation successful")
-    
-    print("🎉 All basic tests passed!")
-    
-except ImportError as e:
-    print(f"❌ Import error: {e}")
-    exit(1)
-except Exception as e:
-    print(f"⚠️  Test error: {e}")
-    exit(1)
-EOF
+        # Create test script using echo commands to avoid heredoc issues
+        echo '#!/usr/bin/env python3' > test_siem.py
+        echo '"\"\"\"' >> test_siem.py
+        echo 'Basic SIEM System Tests' >> test_siem.py
+        echo '"\"\"\"' >> test_siem.py
+        echo 'try:' >> test_siem.py
+        echo '    import scapy.all as scapy' >> test_siem.py
+        echo '    import pandas as pd' >> test_siem.py
+        echo '    import numpy as np' >> test_siem.py
+        echo '    from flask import Flask' >> test_siem.py
+        echo '    import requests' >> test_siem.py
+        echo '    ' >> test_siem.py
+        echo '    print("✅ All core imports successful")' >> test_siem.py
+        echo '    ' >> test_siem.py
+        echo '    # Test basic functionality' >> test_siem.py
+        echo '    app = Flask(__name__)' >> test_siem.py
+        echo '    print("✅ Flask app creation successful")' >> test_siem.py
+        echo '    ' >> test_siem.py
+        echo '    # Test data manipulation' >> test_siem.py
+        echo '    data = pd.DataFrame({"test": [1, 2, 3]})' >> test_siem.py
+        echo '    print("✅ Pandas DataFrame creation successful")' >> test_siem.py
+        echo '    ' >> test_siem.py
+        echo '    print("🎉 All basic tests passed!")' >> test_siem.py
+        echo '    ' >> test_siem.py
+        echo 'except ImportError as e:' >> test_siem.py
+        echo '    print(f"❌ Import error: {e}")' >> test_siem.py
+        echo '    exit(1)' >> test_siem.py
+        echo 'except Exception as e:' >> test_siem.py
+        echo '    print(f"⚠️ Test error: {e}")' >> test_siem.py
+        echo '    exit(1)' >> test_siem.py
         
         python test_siem.py
 
-    - name: Security scan (basic)
+    - name: Verify installation
       run: |
-        echo "🔒 Running basic security checks..."
-        # Check for common security issues in requirements
+        echo "🔍 Verifying package installation..."
         pip list
-        echo "✅ Basic security checks completed"
+        echo "✅ Installation verification completed"
 
   docker-build:
     runs-on: ubuntu-24.04
@@ -148,5 +138,5 @@ EOF
           docker build -t siem-system:latest .
           echo "✅ Docker image built successfully"
         else
-          echo "ℹ️  No Dockerfile found, skipping Docker build"
+          echo "ℹ️ No Dockerfile found, skipping Docker build"
         fi
