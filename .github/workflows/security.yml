@@ -1,0 +1,47 @@
+name: Security & Code Quality
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 6 * * 1' # Weekly security scan
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install security tools
+      run: |
+        pip install bandit safety pylint
+    
+    - name: Run bandit security scan
+      run: |
+        echo "🔒 Running security scan..."
+        bandit -r . -f json -o bandit-results.json || true
+    
+    - name: Check for vulnerable dependencies
+      run: |
+        echo "📦 Checking for vulnerable packages..."
+        safety check --json --output safety-report.json || true
+    
+    - name: Code linting
+      run: |
+        echo "📝 Running code linting..."
+        pylint $(find . -name "*.py" | grep -v venv) || true
+
+  dependency-vulnerabilities:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Scan for vulnerabilities
+      uses: actions/dependency-review-action@v3
