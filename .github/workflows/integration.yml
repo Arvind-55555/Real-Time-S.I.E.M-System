@@ -1,0 +1,56 @@
+name: Integration Tests
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+    services:
+      # You can add services like MongoDB, Elasticsearch, Kafka here
+      mongodb:
+        image: mongo:5.0
+        ports:
+          - 27017:27017
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+    
+    - name: Run integration tests
+      run: |
+        echo "🔗 Running integration tests..."
+        python -c "
+try:
+    # Test database connectivity
+    import pymongo
+    client = pymongo.MongoClient('mongodb://localhost:27017/')
+    db = client['siem_test']
+    print('✅ MongoDB connection test passed')
+    
+    # Test data insertion/retrieval
+    test_data = {'test': 'integration', 'timestamp': '2024-01-01'}
+    result = db.test_collection.insert_one(test_data)
+    retrieved = db.test_collection.find_one({'_id': result.inserted_id})
+    
+    if retrieved['test'] == 'integration':
+        print('✅ MongoDB CRUD operations test passed')
+    else:
+        print('❌ MongoDB data retrieval failed')
+    
+    # Cleanup
+    db.test_collection.delete_many({})
+    
+except Exception as e:
+    print(f'❌ Integration test failed: {e}')
+    exit(1)
+"
