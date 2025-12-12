@@ -51,55 +51,55 @@ A production-ready Security Information and Event Management (SIEM) system with 
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                       SIEM CORE ENGINE (Enhanced)                          │
+│                       SIEM CORE ENGINE (Enhanced)                           │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  ┌─────────────────┐    ┌──────────────┐    ┌──────────────────────────┐   │
-│  │  Data Sources   │    │   Parsers    │    │   Event Processor        │   │
-│  │                 │───▶│              │───▶│                          │   │
-│  │ • Threat Feeds  │    │ • Syslog     │    │ • Enrich with GeoIP      │   │
-│  │ • GitHub API    │    │ • JSON       │    │ • Normalize fields       │   │
-│  │ • Honeypots     │    │ • Generic    │    │ • IP classification      │   │
-│  │ • Web Traffic   │    │ • RFC 3164   │    │ • User tracking          │   │
-│  └─────────────────┘    │ • RFC 5424   │    └──────────┬───────────────┘   │
-│                         └──────────────┘               │                   │
-│                                                        │                   │
-│  ┌─────────────────────────────────────────────────────▼─────────────────┐ │
-│  │                    THREAT DETECTION LAYER                             │ │
-│  │                                                                       │ │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌─────────────────────────────┐│ │
-│  │  │ Rules Engine │  │   ML Model   │  │  Anomaly Detector           ││ │
-│  │  │              │  │              │  │                             ││ │
-│  │  │ • 50+ Rules  │  │ • Isolation  │  │ • Frequency anomalies       ││ │
-│  │  │ • MITRE      │  │   Forest     │  │ • Rare events               ││ │
-│  │  │   ATT&CK     │  │ • 20 features│  │ • Unusual time access       ││ │
-│  │  │ • Regex      │  │ • 85-95%     │  │ • Data volume spikes        ││ │
-│  │  │   matching   │  │   accuracy   │  │                             ││ │
-│  │  └──────┬───────┘  └──────┬───────┘  └──────────┬──────────────────┘│ │
-│  └─────────┼──────────────────┼─────────────────────┼───────────────────┘ │
-│            └──────────────────┴─────────────────────┘                     │
-│                               │                                           │
-│  ┌────────────────────────────▼──────────────────────────────┐            │
-│  │              Correlation Engine                            │            │
-│  │  • IP-based correlation (5-min window)                    │            │
-│  │  • User behavior analysis                                 │            │
-│  │  • Attack pattern detection (brute force, scanning)       │            │
-│  └────────────────────────────┬──────────────────────────────┘            │
-│                               │                                           │
-│  ┌────────────────────────────▼──────────────────────────────┐            │
-│  │              Alert Manager                                 │            │
-│  │  • Severity prioritization (critical → low)               │            │
-│  │  • Alert lifecycle (new → acknowledged → resolved)        │            │
-│  │  • Statistical tracking                                   │            │
-│  └────────────────────────────┬──────────────────────────────┘            │
-│                               │                                           │
-│  ┌─────────────────┐    ┌─────┴──────────┐    ┌───────────────────────┐  │
-│  │ Elasticsearch   │◀───│ Notifications  │    │  Kibana Dashboard     │  │
-│  │                 │    │                │    │                       │  │
-│  │ • Index events  │    │ • Email        │    │ • Visualizations      │  │
-│  │ • Store alerts  │    │ • Slack        │    │ • Real-time metrics   │  │
-│  │ • Query logs    │    │ • Webhook      │    │ • Threat analytics    │  │
-│  └─────────────────┘    └────────────────┘    └───────────────────────┘  │
+│  ┌─────────────────┐    ┌──────────────┐    ┌──────────────────────────┐    │
+│  │  Data Sources   │    │   Parsers    │    │   Event Processor        │    │
+│  │                 │───▶│              │───▶│                          │    │
+│  │ • Threat Feeds  │    │ • Syslog     │    │ • Enrich with GeoIP      │    │
+│  │ • GitHub API    │    │ • JSON       │    │ • Normalize fields       │    │
+│  │ • Honeypots     │    │ • Generic    │    │ • IP classification      │    │
+│  │ • Web Traffic   │    │ • RFC 3164   │    │ • User tracking          │    │
+│  └─────────────────┘    │ • RFC 5424   │    └──────────┬───────────────┘    │
+│                         └──────────────┘               │                    │
+│                                                        │                    │
+│  ┌─────────────────────────────────────────────────────▼─────────────────┐  │
+│  │                    THREAT DETECTION LAYER                             │  │
+│  │                                                                       │  │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌─────────────────────────────┐  │  │
+│  │  │ Rules Engine │  │   ML Model   │  │  Anomaly Detector           │  │  │
+│  │  │              │  │              │  │                             │  │  │
+│  │  │ • 50+ Rules  │  │ • Isolation  │  │ • Frequency anomalies       │  │  │
+│  │  │ • MITRE      │  │   Forest     │  │ • Rare events               │  │  │
+│  │  │   ATT&CK     │  │ • 20 features│  │ • Unusual time access       │  │  │
+│  │  │ • Regex      │  │ • 85-95%     │  │ • Data volume spikes        │  │  │
+│  │  │   matching   │  │   accuracy   │  │                             │  │  │
+│  │  └──────┬───────┘  └──────┬───────┘  └──────────┬──────────────────┘  │  │
+│  └─────────┼──────────────────┼─────────────────────┼────────────────────┘  │
+│            └──────────────────┴─────────────────────┘                       │
+│                               │                                             │
+│  ┌────────────────────────────▼──────────────────────────────┐              │
+│  │              Correlation Engine                           │              │
+│  │  • IP-based correlation (5-min window)                    │              │
+│  │  • User behavior analysis                                 │              │
+│  │  • Attack pattern detection (brute force, scanning)       │              │
+│  └────────────────────────────┬──────────────────────────────┘              │
+│                               │                                             │
+│  ┌────────────────────────────▼──────────────────────────────┐              │
+│  │              Alert Manager                                │              │
+│  │  • Severity prioritization (critical → low)               │              │
+│  │  • Alert lifecycle (new → acknowledged → resolved)        │              │
+│  │  • Statistical tracking                                   │              │
+│  └────────────────────────────┬──────────────────────────────┘              │
+│                               │                                             │
+│  ┌─────────────────┐    ┌─────┴──────────┐    ┌───────────────────────┐     │
+│  │ Elasticsearch   │◀───│ Notifications  │    │  Kibana Dashboard     │     │
+│  │                 │    │                │    │                       │     │
+│  │ • Index events  │    │ • Email        │    │ • Visualizations      │     │
+│  │ • Store alerts  │    │ • Slack        │    │ • Real-time metrics   │     │
+│  │ • Query logs    │    │ • Webhook      │    │ • Threat analytics    │     │
+│  └─────────────────┘    └────────────────┘    └───────────────────────┘     │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
