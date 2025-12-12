@@ -1,0 +1,38 @@
+elasticsearch:
+  host: localhost
+  port: 9200
+  index: siem-events
+  enabled: true
+  verify_certs: false
+
+notifications:
+  email:
+    enabled: false
+    smtp_server: smtp.gmail.com
+    smtp_port: 587
+    from: siem@example.com
+    to: security@example.com
+  
+  slack:
+    enabled: false
+    webhook_url: https://hooks.slack.com/services/YOUR/WEBHOOK/URL
+  
+  webhook:
+    enabled: false
+    url: https://your-webhook-endpoint.com/alerts
+
+detection:
+  rules_file: config/detection_rules.yaml
+  anomaly_threshold: 3.0
+  correlation_window_minutes: 5
+  max_history_size: 10000
+
+logging:
+  level: INFO
+  file: logs/siem.log
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+processing:
+  batch_size: 100
+  flush_interval_seconds: 5
+  worker_threads: 4

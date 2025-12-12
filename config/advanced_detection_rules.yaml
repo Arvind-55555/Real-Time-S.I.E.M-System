@@ -1,0 +1,314 @@
+rules:
+  # === AUTHENTICATION & ACCESS CONTROL ===
+  
+  - name: "brute_force_attack"
+    description: "Detect brute force login attempts"
+    condition: "event.failed_logins > 10 within 5m"
+    severity: "critical"
+    category: "authentication"
+    mitre_attack: "T1110"
+    field: "failed_logins"
+    operator: ">"
+    threshold: 10
+    
+  - name: "credential_stuffing"
+    description: "Detect credential stuffing attempts from multiple IPs"
+    condition: "event.unique_failed_ips > 20"
+    severity: "critical"
+    category: "authentication"
+    mitre_attack: "T1110.004"
+    field: "unique_failed_ips"
+    operator: ">"
+    threshold: 20
+    
+  - name: "privilege_escalation_sudo"
+    description: "Detect privilege escalation via sudo"
+    condition: "event.action == 'sudo' or event.action == 'su'"
+    severity: "high"
+    category: "privilege_escalation"
+    mitre_attack: "T1548.003"
+    field: "action"
+    values: ["sudo", "su", "pkexec"]
+    operator: "in"
+    
+  - name: "suspicious_account_creation"
+    description: "Detect suspicious account creation"
+    condition: "event.action == 'user_add' and event.hour >= 22 or event.hour <= 6"
+    severity: "high"
+    category: "persistence"
+    mitre_attack: "T1136"
+    field: "action"
+    value: "user_add"
+    operator: "=="
+    
+  # === DATA EXFILTRATION ===
+  
+  - name: "large_data_transfer"
+    description: "Detect large outbound data transfers"
+    condition: "event.bytes_sent > 100000000"
+    severity: "critical"
+    category: "exfiltration"
+    mitre_attack: "T1041"
+    field: "bytes_sent"
+    operator: ">"
+    threshold: 100000000
+    
+  - name: "data_exfiltration_dns"
+    description: "Detect DNS tunneling for data exfiltration"
+    condition: "event.dns_query_length > 100"
+    severity: "high"
+    category: "exfiltration"
+    mitre_attack: "T1071.004"
+    field: "dns_query_length"
+    operator: ">"
+    threshold: 100
+    
+  - name: "unusual_upload_volume"
+    description: "Detect unusual upload volume"
+    condition: "event.upload_count > 50 within 10m"
+    severity: "medium"
+    category: "exfiltration"
+    mitre_attack: "T1567"
+    field: "upload_count"
+    operator: ">"
+    threshold: 50
+    
+  # === NETWORK ATTACKS ===
+  
+  - name: "port_scan_detection"
+    description: "Detect port scanning activity"
+    condition: "event.unique_ports_accessed > 20 within 1m"
+    severity: "high"
+    category: "reconnaissance"
+    mitre_attack: "T1046"
+    field: "unique_ports_accessed"
+    operator: ">"
+    threshold: 20
+    
+  - name: "ddos_detection"
+    description: "Detect potential DDoS attack"
+    condition: "event.requests_per_second > 1000"
+    severity: "critical"
+    category: "impact"
+    mitre_attack: "T1498"
+    field: "requests_per_second"
+    operator: ">"
+    threshold: 1000
+    
+  - name: "syn_flood"
+    description: "Detect SYN flood attack"
+    condition: "event.syn_packets > 500 within 1m"
+    severity: "critical"
+    category: "impact"
+    mitre_attack: "T1499.001"
+    field: "syn_packets"
+    operator: ">"
+    threshold: 500
+    
+  # === WEB ATTACKS ===
+  
+  - name: "sql_injection"
+    description: "Detect SQL injection attempts"
+    condition: "event.query contains 'union select' or 'drop table' or '--'"
+    severity: "critical"
+    category: "initial_access"
+    mitre_attack: "T1190"
+    field: "query"
+    patterns:
+      - "union\\s+select"
+      - "drop\\s+table"
+      - "';\\s*--"
+      - "or\\s+1=1"
+      - "union\\s+all\\s+select"
+    operator: "regex"
+    
+  - name: "xss_attack"
+    description: "Detect cross-site scripting attempts"
+    condition: "event.url_params contains '<script>'"
+    severity: "high"
+    category: "initial_access"
+    mitre_attack: "T1059.007"
+    field: "url_params"
+    patterns:
+      - "<script[^>]*>"
+      - "javascript:"
+      - "onerror\\s*="
+      - "onload\\s*="
+    operator: "regex"
+    
+  - name: "path_traversal"
+    description: "Detect directory traversal attempts"
+    condition: "event.url contains '../'"
+    severity: "high"
+    category: "initial_access"
+    mitre_attack: "T1083"
+    field: "url"
+    patterns:
+      - "\\.\\./\\.\\./"
+      - "\\.\\.\\\\.\\.%5c"
+      - "%2e%2e%2f"
+    operator: "regex"
+    
+  - name: "command_injection"
+    description: "Detect command injection attempts"
+    condition: "event.input contains ';' or '|' or '&&'"
+    severity: "critical"
+    category: "execution"
+    mitre_attack: "T1059"
+    field: "input"
+    patterns:
+      - ";\\s*(rm|cat|curl|wget)"
+      - "\\|\\s*(nc|bash|sh)"
+      - "&&\\s*whoami"
+    operator: "regex"
+    
+  # === MALWARE & EXPLOITS ===
+  
+  - name: "malware_signature"
+    description: "Detect known malware signatures"
+    condition: "event.file_hash in malware_db"
+    severity: "critical"
+    category: "execution"
+    mitre_attack: "T1204"
+    field: "file_hash"
+    blacklist:
+      - "5d41402abc4b2a76b9719d911017c592"  # Example MD5
+      - "e99a18c428cb38d5f260853678922e03"
+    operator: "in"
+    
+  - name: "ransomware_behavior"
+    description: "Detect ransomware-like file encryption"
+    condition: "event.files_encrypted > 10 within 5m"
+    severity: "critical"
+    category: "impact"
+    mitre_attack: "T1486"
+    field: "files_encrypted"
+    operator: ">"
+    threshold: 10
+    
+  - name: "suspicious_process_creation"
+    description: "Detect suspicious process creation"
+    condition: "event.process_name in suspicious_processes"
+    severity: "high"
+    category: "execution"
+    mitre_attack: "T1059"
+    field: "process_name"
+    values:
+      - "powershell.exe"
+      - "cmd.exe"
+      - "wscript.exe"
+      - "cscript.exe"
+      - "mshta.exe"
+    operator: "in"
+    
+  # === LATERAL MOVEMENT ===
+  
+  - name: "lateral_movement_smb"
+    description: "Detect lateral movement via SMB"
+    condition: "event.smb_sessions > 5 within 10m"
+    severity: "high"
+    category: "lateral_movement"
+    mitre_attack: "T1021.002"
+    field: "smb_sessions"
+    operator: ">"
+    threshold: 5
+    
+  - name: "pass_the_hash"
+    description: "Detect pass-the-hash attack"
+    condition: "event.ntlm_auth_attempts > 10"
+    severity: "critical"
+    category: "lateral_movement"
+    mitre_attack: "T1550.002"
+    field: "ntlm_auth_attempts"
+    operator: ">"
+    threshold: 10
+    
+  # === PERSISTENCE ===
+  
+  - name: "scheduled_task_creation"
+    description: "Detect suspicious scheduled task creation"
+    condition: "event.action == 'scheduled_task_create'"
+    severity: "medium"
+    category: "persistence"
+    mitre_attack: "T1053.005"
+    field: "action"
+    value: "scheduled_task_create"
+    operator: "=="
+    
+  - name: "registry_autorun_modification"
+    description: "Detect registry autorun modification"
+    condition: "event.registry_path contains 'Run' or 'RunOnce'"
+    severity: "high"
+    category: "persistence"
+    mitre_attack: "T1547.001"
+    field: "registry_path"
+    patterns:
+      - "\\\\Run$"
+      - "\\\\RunOnce$"
+      - "\\\\RunServices"
+    operator: "regex"
+    
+  # === SUSPICIOUS IP ADDRESSES ===
+  
+  - name: "blacklisted_ip_connection"
+    description: "Detect connection from blacklisted IP"
+    condition: "event.source_ip in ip_blacklist"
+    severity: "critical"
+    category: "initial_access"
+    mitre_attack: "T1190"
+    field: "source_ip"
+    blacklist:
+      - "192.0.2.1"
+      - "198.51.100.1"
+      - "203.0.113.1"
+      - "185.220.101.0/24"  # Tor exit nodes
+    operator: "in"
+    
+  - name: "geo_anomaly"
+    description: "Detect login from unusual geographic location"
+    condition: "event.country_code in high_risk_countries"
+    severity: "medium"
+    category: "initial_access"
+    mitre_attack: "T1078"
+    field: "country_code"
+    values:
+      - "CN"
+      - "RU"
+      - "KP"
+      - "IR"
+    operator: "in"
+    
+  # === CRYPTO MINING ===
+  
+  - name: "crypto_mining_activity"
+    description: "Detect cryptocurrency mining"
+    condition: "event.cpu_usage > 90 and event.network_connections > 10"
+    severity: "high"
+    category: "impact"
+    mitre_attack: "T1496"
+    field: "cpu_usage"
+    operator: ">"
+    threshold: 90
+    
+  # === INSIDER THREATS ===
+  
+  - name: "after_hours_access"
+    description: "Detect after-hours access to sensitive resources"
+    condition: "event.hour >= 22 or event.hour <= 6"
+    severity: "medium"
+    category: "collection"
+    mitre_attack: "T1114"
+    field: "hour"
+    operator: "time_range"
+    time_start: 22
+    time_end: 6
+    
+  - name: "mass_file_download"
+    description: "Detect mass file download"
+    condition: "event.files_downloaded > 100 within 10m"
+    severity: "high"
+    category: "collection"
+    mitre_attack: "T1005"
+    field: "files_downloaded"
+    operator: ">"
+    threshold: 100

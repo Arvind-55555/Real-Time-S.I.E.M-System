@@ -1,0 +1,35 @@
+#!/bin/bash
+# Quick run wrapper for SIEM scripts
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+case "$1" in
+  demo)
+    python3 scripts/demo.py
+    ;;
+  dashboard)
+    python3 scripts/run_live_dashboard.py
+    ;;
+  monitor)
+    shift
+    python3 scripts/monitor.py "$@"
+    ;;
+  test)
+    python3 test_complete_system.py
+    ;;
+  *)
+    echo "SIEM Quick Run Commands:"
+    echo ""
+    echo "  ./run demo        - Run interactive demo"
+    echo "  ./run dashboard   - Start live web dashboard"
+    echo "  ./run monitor     - Start CLI monitor"
+    echo "  ./run test        - Run system tests"
+    echo ""
+    echo "Examples:"
+    echo "  ./run demo"
+    echo "  ./run dashboard"
+    echo "  ./run monitor --simulate --count 20"
+    echo ""
+    ;;
+esac
