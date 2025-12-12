@@ -8,7 +8,7 @@
 
 A production-ready Security Information and Event Management (SIEM) system with **Machine Learning**, **50+ Advanced Detection Rules**, **Real-Time Web Data Collection**, and **ELK Stack Integration** for enterprise-grade threat detection and security monitoring.
 
-**[View Live Demo](https://arvind-55555.github.io/Real-Time-S.I.E.M-System/)** | **[Documentation](PRODUCTION_GUIDE.md)** | **[Quick Start](#quick-start)**
+**[View Live Demo](https://arvind-55555.github.io/Real-Time-S.I.E.M-System/)** | **[Documentation](docs/PRODUCTION_GUIDE.md)** | **[Quick Start](#quick-start)**
 
 ## Features
 
