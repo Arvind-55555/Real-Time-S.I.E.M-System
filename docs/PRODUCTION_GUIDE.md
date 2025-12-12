@@ -46,36 +46,36 @@ python3 scripts/ml_anomaly_detector.py
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│                    DATA SOURCES                             │
+│                    DATA SOURCES                            │
 ├────────────────────────────────────────────────────────────┤
-│  • Threat Intelligence Feeds (RSS)                          │
-│  • GitHub Security Advisories (API)                         │
-│  • Simulated Web Traffic                                    │
-│  • Honeypot Data                                            │
-│  • IP Reputation Checks                                     │
+│  • Threat Intelligence Feeds (RSS)                         │
+│  • GitHub Security Advisories (API)                        │
+│  • Simulated Web Traffic                                   │
+│  • Honeypot Data                                           │
+│  • IP Reputation Checks                                    │
 └────────────────┬───────────────────────────────────────────┘
                  │
                  ▼
 ┌────────────────────────────────────────────────────────────┐
-│                  SIEM CORE ENGINE                           │
+│                  SIEM CORE ENGINE                          │
 ├────────────────────────────────────────────────────────────┤
-│  ┌──────────────┐  ┌──────────────┐  ┌─────────────────┐  │
-│  │   Parsers    │──│   Event      │──│   Detection     │  │
-│  │              │  │  Processor   │  │   Engine        │  │
-│  │• Syslog      │  │              │  │ • 50+ Rules     │  │
-│  │• JSON        │  │• Normalize   │  │ • ML Model      │  │
-│  │• Custom      │  │• Enrich      │  │ • Correlation   │  │
-│  └──────────────┘  └──────────────┘  └─────────────────┘  │
+│  ┌──────────────┐  ┌──────────────┐  ┌─────────────────┐   │
+│  │   Parsers    │──│   Event      │──│   Detection     │   │
+│  │              │  │  Processor   │  │   Engine        │   │
+│  │• Syslog      │  │              │  │ • 50+ Rules     │   │
+│  │• JSON        │  │• Normalize   │  │ • ML Model      │   │
+│  │• Custom      │  │• Enrich      │  │ • Correlation   │   │
+│  └──────────────┘  └──────────────┘  └─────────────────┘   │
 └────────────────┬───────────────────────────────────────────┘
                  │
                  ▼
 ┌────────────────────────────────────────────────────────────┐
-│                    STORAGE & ANALYSIS                       │
+│                    STORAGE & ANALYSIS                      │
 ├────────────────────────────────────────────────────────────┤
-│  ┌─────────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │ Elasticsearch   │  │   Logstash   │  │   Kibana     │  │
-│  │ (Storage)       │  │  (Pipeline)  │  │  (Viz)       │  │
-│  └─────────────────┘  └──────────────┘  └──────────────┘  │
+│  ┌─────────────────┐  ┌──────────────┐  ┌──────────────┐   │
+│  │ Elasticsearch   │  │   Logstash   │  │   Kibana     │   │
+│  │ (Storage)       │  │  (Pipeline)  │  │  (Viz)       │   │
+│  └─────────────────┘  └──────────────┘  └──────────────┘   │
 └────────────────────────────────────────────────────────────┘
 ```
 
